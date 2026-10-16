@@ -8,7 +8,7 @@
     --muted: #a8a8b0;
     --accent: #f2b134;
     --accent-ink: #1a1405;
-    --rail-bg: #e4000f;
+    --rail-bg: #ff0000;
     --hint-bg: rgba(0, 0, 0, .82);
     --radius: 10px;
     --rail: clamp(54px, 6vw, 112px);
@@ -50,35 +50,82 @@ input::placeholder { color: var(--muted); }
 .btn:hover { border-color: var(--accent); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
 
-/* Rail */
+/* Rail: collapsed icon strip that expands in place into the full menu */
 .rail {
+    --b: max(36px, calc(var(--rail) * .56));          /* collapsed button size */
+    --row: clamp(48px, 8.5vh, 64px);                  /* menu row height = spacing between icons, open or closed */
+    --mb: 6.3vh;                                      /* distance of the last icon row from the bottom padding */
+    --open-w: clamp(260px, 38.5vw, 560px);
+    --exp-font: clamp(1rem, 1.9vw, 1.6rem);
+    --ease: cubic-bezier(.22, 1, .36, 1);            /* vertical / size changes: smooth */
+    --ease-x: linear(0, 0.005, 0.013, 0.028, 0.049, 0.075, 0.111, 0.161, 0.222, 0.296, 0.394, 0.505, 0.621, 0.778, 0.925, 0.99, 0.988, 0.984, 0.981, 0.979, 0.977, 0.976, 0.976, 0.978, 0.98, 0.983, 0.988, 0.995, 1, 1, 1);   /* collapsing: matched to the Switch recording (30fps) */
+    --dur: 0.300s;
+    --dur-x: 0.300s;
     position: fixed; z-index: 10; left: 0; top: 0; bottom: 0; width: var(--rail);
-    background: var(--rail-bg);
-    display: flex; flex-direction: column; align-items: center;
+    background: var(--rail-bg); overflow: hidden;
+    display: flex; flex-direction: column; align-items: stretch;
     padding: 4.3vh 0 5vh;
+    transition: width var(--dur-x) var(--ease-x);
 }
+/* Opening: curve measured from the Switch recording: glide right, overshoot ~8%, settle back leftwards */
+body.menu-open .rail { --ease-x: linear(0, 0.014, 0.033, 0.054, 0.08, 0.113, 0.163, 0.27, 0.407, 0.534, 0.619, 0.688, 0.749, 0.812, 0.888, 0.974, 1.044, 1.071, 1.074, 1.076, 1.078, 1.077, 1.062, 1.039, 1.021, 1.013, 1.006, 1.002, 1, 1, 1); --dur-x: 0.267s; --dur: 0.267s; width: var(--open-w); }
+
+.rail-head { display: flex; align-items: center; gap: 14px; white-space: nowrap; height: max(48px, calc(var(--rail) * .56));
+    padding-left: calc((var(--rail) - var(--rail) * .56) / 2);
+    transition: padding-left var(--dur-x) var(--ease-x); }
+body.menu-open .rail-head { padding-left: 2vw; }
 .rail-badge {
-    width: calc(var(--rail) * .56); height: calc(var(--rail) * .56);
-    border-radius: 50%; border: 3px solid #fff; background: #2a0a0d;
-    display: grid; place-items: center; color: #fff; font-weight: 800;
+    flex: none; width: calc(var(--rail) * .56); height: calc(var(--rail) * .56);
+    border-radius: 50%; border: 3px solid #fff; background: #2a0a0d; padding: 0; cursor: pointer;
+    display: grid; place-items: center; color: #fff; font-weight: 800; font-family: inherit;
     font-size: calc(var(--rail) * .26); text-transform: uppercase;
     box-shadow: 0 0 0 2px rgba(0,0,0,.25);
+    transition: width var(--dur-x) var(--ease-x), height var(--dur-x) var(--ease-x), font-size var(--dur) var(--ease);
 }
+body.menu-open .rail-badge { width: 48px; height: 48px; font-size: 1.2rem; }
+.rail-who { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; color: #fff;
+    opacity: 0; transition: opacity .15s ease; }
+.rail-who span { overflow: hidden; text-overflow: ellipsis; }
+.rail-who span:first-child { font-size: .85rem; opacity: .85; }
+body.menu-open .rail-who { opacity: 1; transition: opacity .12s ease .1s; }
+
 .rail-nav {
-    margin-top: auto; margin-bottom: 8vh;
-    display: flex; flex-direction: column; align-items: center; gap: clamp(14px, 3.6vh, 34px);
+    margin-top: auto; margin-bottom: calc(var(--mb) + (var(--row) - var(--b)) / 2); width: 100%;
+    display: flex; flex-direction: column; align-items: flex-start; gap: calc(var(--row) - var(--b));
+    transition: gap var(--dur) var(--ease), margin-bottom var(--dur) var(--ease);
 }
+/* Collapsed icons sit at the same spacing and height as the menu rows, so nothing shifts */
+body.menu-open .rail-nav { gap: 0; margin-bottom: var(--mb); }
 .rail-btn {
-    width: max(36px, calc(var(--rail) * .56)); height: max(36px, calc(var(--rail) * .56));
-    display: grid; place-items: center; padding: 0;
+    display: flex; align-items: center; flex: none; white-space: nowrap;
+    width: var(--b); height: var(--b);
+    margin-left: calc((var(--rail) - var(--b)) / 2);
+    padding: 0 0 0 calc(var(--b) * .19);
     border: 0; border-radius: 14%; background: transparent; color: #fff; cursor: pointer;
+    font: inherit; font-size: var(--exp-font); text-align: left;
+    transition: width var(--dur-x) var(--ease-x), height var(--dur) var(--ease), margin-left var(--dur-x) var(--ease-x),
+                padding-left var(--dur-x) var(--ease-x), border-radius var(--dur) var(--ease), background-color .12s;
+}
+body.menu-open .rail-btn {
+    width: 100%; height: var(--row); margin-left: 0; border-radius: 0;
+    padding-left: clamp(36px, 5vw, 80px);
 }
 .rail-btn[hidden] { display: none; }
-.rail-btn svg { width: 62%; height: 62%; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.rail-btn svg {
+    flex: none; width: calc(var(--b) * .62); height: calc(var(--b) * .62);
+    fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    transition: width var(--dur-x) var(--ease-x), height var(--dur-x) var(--ease-x);
+}
+body.menu-open .rail-btn svg { width: calc(var(--exp-font) * 1.7); height: calc(var(--exp-font) * 1.7); }
 .rail-btn svg .dot { fill: currentColor; stroke: none; }
+.rail-label { margin-left: 1.2rem; opacity: 0; transition: opacity .12s ease; pointer-events: none; }
+body.menu-open .rail-label { opacity: 1; transition: opacity .12s ease .1s; }
 .rail-btn:hover { background: rgba(255,255,255,.18); }
-.rail-btn[aria-pressed="true"] { background: #fff; color: var(--rail-bg); }
+body:not(.menu-open) .rail-btn[aria-pressed="true"] { background: #fff; color: var(--rail-bg); }
 .rail-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+body.menu-open .rail-btn:focus-visible { outline: 0; }
+body.menu-open .rail-btn:hover { background: transparent; }
+body.menu-open .rail-btn:focus { background: #fff; color: var(--rail-bg); }
 
 /* Library */
 main { margin-left: var(--rail); min-height: 100vh; padding-bottom: 64px; }
@@ -97,7 +144,20 @@ main { margin-left: var(--rail); min-height: 100vh; padding-bottom: 64px; }
     background: var(--panel); color: #fff; font: inherit;
     transition: transform .12s ease, box-shadow .12s ease;
 }
-.tile:focus { outline: 0; z-index: 2; transform: scale(1.05); box-shadow: 0 0 0 3px #fff, 0 8px 28px rgba(0,0,0,.65); }
+.tile { --ring: clamp(2px, .13vw, 4px); }
+/* Selected tile: grows ~10% and gets an inside border that pulses white <-> dark grey, 0.8s per cycle (measured from the Switch) */
+.tile:focus { outline: none; z-index: 2; transform: scale(1.1); }
+/* The ring is a pseudo-element so it paints above the absolutely positioned thumbnail */
+.tile:focus::after {
+    content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    border: var(--ring) solid #fff;
+    animation: tile-pulse .8s infinite;
+}
+@keyframes tile-pulse {
+    0%   { border-color: #fff;    animation-timing-function: cubic-bezier(.37, 0, .63, 1); }
+    50%  { border-color: #222;    animation-timing-function: cubic-bezier(.37, 0, .63, 1); }
+    100% { border-color: #fff; }
+}
 .tile .thumb { position: absolute; inset: 0; display: grid; place-items: center; }
 .tile .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .tile .thumb.plain { align-content: center; justify-items: center; gap: .3rem; padding: .5rem; text-align: center; }
@@ -198,3 +258,25 @@ main { margin-left: var(--rail); min-height: 100vh; padding-bottom: 64px; }
 @media (prefers-reduced-motion: reduce) {
     * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
+
+/* Blurred library behind the expanded rail */
+.menu-scrim {
+    position: fixed; inset: 0; z-index: 9;
+    background: rgba(0, 0, 0, .35);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    opacity: 0; visibility: hidden;
+    transition: opacity .1s ease, visibility 0s linear .1s;      /* closing: blur clears as the rail starts to shrink */
+}
+body.menu-open .menu-scrim { opacity: 1; visibility: visible; transition: opacity .16s ease .14s, visibility 0s; }   /* opening: blur lags the rail */
+.hints { transition: opacity .1s ease .2s; }                      /* closing: library hints return near the end */
+body.menu-open .hints { opacity: 0; pointer-events: none; transition: opacity .05s; }
+
+.menu-hints {
+    position: fixed; z-index: 11; right: 0; bottom: 0; height: 44px; padding: 0 2vw; gap: 1.6rem;
+    display: flex; align-items: center; background: var(--hint-bg); backdrop-filter: blur(6px);
+    opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility 0s linear .2s;
+}
+body.menu-open .menu-hints { opacity: 1; visibility: visible; transition: opacity .12s ease .22s; }
+.menu-hints .hint { color: #fff; }
+.menu-hints .hint kbd { background: #fff; color: #000; }
+#settingsBtn svg { stroke-width: 1.6; }

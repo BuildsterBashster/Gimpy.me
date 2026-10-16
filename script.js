@@ -383,6 +383,36 @@
         if (id != null) openGame(id);
     });
 
+
+    /* ---------- expanded menu: the red rail grows in place ---------- */
+    function menuOpen() { return document.body.classList.contains("menu-open"); }
+    function menuItems() { return Array.from(document.querySelectorAll(".rail-btn")).filter((el) => !el.hidden); }
+    function openMenu() {
+        if (menuOpen()) return;
+        void document.querySelector(".rail").offsetWidth;   // settle the collapsed layout first so the open animates
+        document.body.classList.add("menu-open");
+        const items = menuItems();
+        const start = (view === "featured" && !$("navFeatured").hidden) ? $("navFeatured") : $("navAll");
+        (items.includes(start) ? start : items[0]).focus({ preventScroll: true });
+    }
+    function closeMenu(refocus) {
+        if (!menuOpen()) return;
+        document.body.classList.remove("menu-open");
+        if (refocus !== false) focusTile(selId, { preventScroll: true });
+    }
+    document.querySelectorAll(".rail-btn").forEach((btn) => {
+        btn.addEventListener("mouseenter", () => { if (menuOpen()) btn.focus({ preventScroll: true }); });
+        btn.addEventListener("click", () => {      // runs after the button's own action
+            if (!menuOpen()) return;
+            closeMenu(false);
+            if (btn.id === "navAll" || btn.id === "navFeatured") focusTile(selId, { preventScroll: true });
+        });
+    });
+    $("menuScrim").addEventListener("click", () => closeMenu());
+    $("menuBack").addEventListener("click", () => closeMenu());
+    $("menuOk").addEventListener("click", () => { const el = document.activeElement; if (el && el.classList.contains("rail-btn")) el.click(); });
+    $("railBadge").addEventListener("click", () => (menuOpen() ? closeMenu() : openMenu()));
+
     /* ---------- keyboard ---------- */
     function gridColumns() {
         return getComputedStyle($("allGrid")).gridTemplateColumns.split(" ").length || 1;
@@ -399,6 +429,19 @@
             } else if (key === "Escape") {
                 if (!$("overlay").hidden) closePopup(); else closeGame();
             }
+            return;
+        }
+
+        /* menu open: up/down move, right/B/Esc close, A/Enter choose */
+        if (menuOpen() && $("overlay").hidden && $("detailsOverlay").hidden) {
+            if (e.ctrlKey || e.metaKey || e.altKey) return;
+            const items = menuItems();
+            const mi = items.indexOf(document.activeElement);
+            if (key === "ArrowDown") { e.preventDefault(); items[(mi + 1) % items.length].focus(); }
+            else if (key === "ArrowUp") { e.preventDefault(); items[(mi - 1 + items.length) % items.length].focus(); }
+            else if (key === "ArrowRight" || key === "Escape" || key === "b" || key === "B") { e.preventDefault(); closeMenu(); }
+            else if (key === "a" || key === "A") { e.preventDefault(); if (mi >= 0) items[mi].click(); }
+            else if (key === "ArrowLeft") e.preventDefault();
             return;
         }
 
@@ -420,7 +463,10 @@
         const i = list.indexOf(document.activeElement);
         const cols = gridColumns();
         const move = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: cols, ArrowUp: -cols }[key];
-        if (move !== undefined && list.length) {
+        if (key === "ArrowLeft" && (i < 0 || i % cols === 0)) {
+            e.preventDefault();
+            openMenu();
+        } else if (move !== undefined && list.length) {
             e.preventDefault();
             const next = i < 0 ? 0 : Math.min(list.length - 1, Math.max(0, i + move));
             list[next].focus();
@@ -435,6 +481,7 @@
     /* ---------- start ---------- */
     document.title = SITE.title || document.title;
     $("railBadge").textContent = (SITE.title || "A").trim().charAt(0) || "A";
+    $("menuTitle").textContent = SITE.title || "Arcade";
     if (SITE.contact) {
         const link = $("contactLink");
         link.href = SITE.contact;
@@ -448,4 +495,5 @@
 
     const hash = location.hash.slice(1);
     if (hash) openGame(hash);
+    else setTimeout(openMenu, 150);   // menu opens (animated) when the site first loads
 })();
