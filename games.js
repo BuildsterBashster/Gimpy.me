@@ -142,7 +142,7 @@ window.GAMES = [
         authorUrl: "https://www.vivendi.com/en/",
         repo: "",           // optional GitHub link (shows a button in the viewer)
         url: "https://shar-wasm.cjoseph.workers.dev/?skipmovie",            // <-- SLOT 9: paste the iframe link here
-        thumb: "images/sh&r",
+        thumb: "images/sh&r.png",
         aspect: "16/9",         // optional window shape, e.g. "16/9" or "4/3". "" = default
         featured: true
     },
