@@ -124,27 +124,27 @@ window.GAMES = [
     },
     {
         id: 8,
-        name: "Game Slot 8",
+        name: "DOOM",
         tile: "8",
-        author: "",
+        author: "idSoftware, unknown",
         authorUrl: "",
         repo: "",           // optional GitHub link (shows a button in the viewer)
-        url: "",            // <-- SLOT 8: paste the iframe link here
-        thumb: "",
-        aspect: "",         // optional window shape, e.g. "16/9" or "4/3". "" = default
+        url: "https://silentspacemarine.com/",            // <-- SLOT 8: paste the iframe link here
+        thumb: "images/dm.png",
+        aspect: "4/3",         // optional window shape, e.g. "16/9" or "4/3". "" = default
         featured: false
     },
     {
         id: 9,
-        name: "Game Slot 9",
+        name: "The Simpson, hit and run",
         tile: "9",
-        author: "",
-        authorUrl: "",
+        author: "Vivendi Universal",
+        authorUrl: "https://www.vivendi.com/en/",
         repo: "",           // optional GitHub link (shows a button in the viewer)
-        url: "",            // <-- SLOT 9: paste the iframe link here
-        thumb: "",
-        aspect: "",         // optional window shape, e.g. "16/9" or "4/3". "" = default
-        featured: false
+        url: "https://shar-wasm.cjoseph.workers.dev/?skipmovie",            // <-- SLOT 9: paste the iframe link here
+        thumb: "images/sh&r",
+        aspect: "16/9",         // optional window shape, e.g. "16/9" or "4/3". "" = default
+        featured: true
     },
     {
         id: 10,
