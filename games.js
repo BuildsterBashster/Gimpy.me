@@ -112,15 +112,15 @@ window.GAMES = [
     },
     {
         id: 7,
-        name: "Game Slot 7",
+        name: "Slope Plus",
         tile: "7",
-        author: "",
-        authorUrl: "",
-        repo: "",           // optional GitHub link (shows a button in the viewer)
-        url: "",            // <-- SLOT 7: paste the iframe link here
-        thumb: "",
-        aspect: "",         // optional window shape, e.g. "16/9" or "4/3". "" = default
-        featured: false
+        author: "Y8 , oweggs",
+        authorUrl: "https://www.y8.com/",
+        repo: "https://github.com/lonfro/SlopePlusWeb",           // optional GitHub link (shows a button in the viewer)
+        url: "https://lonfro.github.io/SlopePlusWeb/",            // <-- SLOT 7: paste the iframe link here
+        thumb: "images/sp.png",
+        aspect: "16/9",         // optional window shape, e.g. "16/9" or "4/3". "" = default
+        featured: true
     },
     {
         id: 8,
