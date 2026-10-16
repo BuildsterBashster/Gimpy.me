@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Arcade</title>
+    <meta name="description" content="A small collection of browser games.">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="rail" aria-label="Main menu">
+        <div class="rail-badge" id="railBadge" aria-hidden="true">A</div>
+        <div class="rail-nav">
+            <button class="rail-btn" type="button" id="navAll" title="All games" aria-label="All games" aria-pressed="true">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>
+            </button>
+            <button class="rail-btn" type="button" id="navFeatured" title="Featured" aria-label="Featured games" aria-pressed="false" hidden>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 3 14.8 9 21.5 9.8 16.5 14.3 17.9 21 12 17.6 6.1 21 7.5 14.3 2.5 9.8 9.2 9"/></svg>
+            </button>
+            <button class="rail-btn" type="button" id="navRandom" title="Random game" aria-label="Play a random game">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5"/><circle class="dot" cx="8.5" cy="8.5" r="1.2"/><circle class="dot" cx="15.5" cy="8.5" r="1.2"/><circle class="dot" cx="12" cy="12" r="1.2"/><circle class="dot" cx="8.5" cy="15.5" r="1.2"/><circle class="dot" cx="15.5" cy="15.5" r="1.2"/></svg>
+            </button>
+            <button class="rail-btn" type="button" id="navSearch" title="Search ( / )" aria-label="Search games" aria-pressed="false">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>
+            </button>
+            <button class="rail-btn" type="button" id="settingsBtn" title="Settings" aria-label="Settings">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.4"/><circle cx="8" cy="17" r="2.4"/></svg>
+            </button>
+        </div>
+    </nav>
+
+    <main id="library">
+        <div class="searchbar" id="searchWrap" hidden>
+            <input id="searchBar" type="search" placeholder="Search games" aria-label="Search games" autocomplete="off">
+        </div>
+        <div id="allGrid" class="grid" role="list" aria-label="Games"></div>
+    </main>
+
+    <div class="hints" id="hints">
+        <span class="toast" id="toast" role="status" aria-live="polite"></span>
+        <button class="hint" type="button" id="hintSort"><kbd>Y</kbd><span>Sort</span></button>
+        <button class="hint" type="button" id="hintDetails"><kbd>X</kbd><span>Details</span></button>
+        <button class="hint" type="button" id="hintStart"><kbd>A</kbd><span>Start</span></button>
+    </div>
+
+    <section id="viewer" aria-label="Game viewer" hidden>
+        <img class="bg-side" id="bgLeft" src="images/left.png" alt="" aria-hidden="true" draggable="false">
+        <img class="bg-side" id="bgRight" src="images/right.png" alt="" aria-hidden="true" draggable="false">
+        <div class="badge" id="badge" role="img"></div>
+        <div class="viewer-title">
+            <h2 id="gameName">Game</h2>
+            <a id="gameAuthor" href="#" target="_blank" rel="noopener" hidden></a>
+        </div>
+        <div class="viewer-controls">
+            <a class="btn" id="repoBtn" href="#" target="_blank" rel="noopener noreferrer" hidden>View source</a>
+            <button class="btn" type="button" id="fsBtn">Fullscreen</button>
+            <button class="btn" type="button" id="tabBtn">Open in new tab</button>
+            <button class="btn primary" type="button" id="closeBtn">Close</button>
+        </div>
+        <div id="stage">
+            <iframe id="gameFrame" title="Game" allow="fullscreen; gamepad; autoplay"></iframe>
+        </div>
+    </section>
+
+    <div id="overlay" class="overlay" hidden>
+        <div class="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+            <div class="popup-head">
+                <h3 id="popupTitle">Settings</h3>
+                <button class="btn" type="button" id="popupClose" aria-label="Close settings">Close</button>
+            </div>
+            <div class="popup-body">
+                <label class="row">Theme
+                    <select id="themeSelect">
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                    </select>
+                </label>
+                <div class="row">Play counts
+                    <span class="row-actions">
+                        <button class="btn" type="button" id="exportBtn">Export</button>
+                        <button class="btn" type="button" id="importBtn">Import</button>
+                        <button class="btn" type="button" id="resetBtn">Reset</button>
+                    </span>
+                </div>
+                <input type="file" id="importFile" accept="application/json" hidden>
+                <p id="settingsMsg" class="muted" role="status"></p>
+                <div class="row">
+                    <a href="#" id="contactLink" class="btn" hidden>Contact</a>
+                    <span id="footerNote" class="muted"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="detailsOverlay" class="overlay" hidden>
+        <div class="popup" role="dialog" aria-modal="true" aria-labelledby="detailsName">
+            <div class="popup-head">
+                <h3 id="detailsName">Game</h3>
+                <button class="btn" type="button" id="detailsClose" aria-label="Close details">Close</button>
+            </div>
+            <div class="popup-body">
+                <p class="muted" id="detailsMeta"></p>
+                <div class="row-actions">
+                    <a class="btn" id="detailsAuthor" href="#" target="_blank" rel="noopener" hidden>Author</a>
+                    <a class="btn" id="detailsRepo" href="#" target="_blank" rel="noopener noreferrer" hidden>View source</a>
+                    <button class="btn primary" type="button" id="detailsStart">Start</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="games.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

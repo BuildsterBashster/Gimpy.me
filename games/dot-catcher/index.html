@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dot Catcher</title>
+<style>
+    html, body { margin: 0; height: 100%; background: #10131a; overflow: hidden; }
+    canvas { display: block; width: 100%; height: 100%; touch-action: none; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+const c = document.getElementById("c"), ctx = c.getContext("2d");
+let W, H;
+function fit() { W = c.width = innerWidth; H = c.height = innerHeight; }
+addEventListener("resize", fit); fit();
+
+let px = W / 2, score = 0, miss = 0, dots = [], t = 0, over = false;
+const keys = {};
+
+function move(e) { px = (e.touches ? e.touches[0] : e).clientX; }
+addEventListener("mousemove", move);
+addEventListener("touchmove", move, { passive: true });
+addEventListener("keydown", (e) => {
+    keys[e.key] = true;
+    if (over && (e.key === " " || e.key === "Enter")) reset();
+});
+addEventListener("keyup", (e) => { keys[e.key] = false; });
+addEventListener("pointerdown", () => { if (over) reset(); });
+
+function reset() { score = 0; miss = 0; dots = []; over = false; }
+
+function loop() {
+    t++;
+    if (keys.ArrowLeft) px -= 8;
+    if (keys.ArrowRight) px += 8;
+    px = Math.max(40, Math.min(W - 40, px));
+
+    if (!over && t % Math.max(18, 50 - score) === 0) {
+        dots.push({ x: Math.random() * (W - 40) + 20, y: -10, v: 2 + Math.random() * 2 + score * 0.05 });
+    }
+
+    ctx.fillStyle = "#10131a";
+    ctx.fillRect(0, 0, W, H);
+
+    const py = H - 40;
+    ctx.fillStyle = "#f2b134";
+    ctx.fillRect(px - 40, py, 80, 14);
+
+    for (const d of dots) {
+        if (!over) d.y += d.v;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, 9, 0, Math.PI * 2);
+        ctx.fillStyle = "#5fd0c0";
+        ctx.fill();
+        if (!d.done && d.y > py - 9 && d.y < py + 14 && Math.abs(d.x - px) < 48) { d.done = true; score++; }
+        else if (!d.done && d.y > H) { d.done = true; miss++; if (miss >= 5) over = true; }
+    }
+    dots = dots.filter((d) => !d.done);
+
+    ctx.fillStyle = "#ece9e1";
+    ctx.font = "20px system-ui, sans-serif";
+    ctx.textAlign = "left";
+    ctx.fillText("Score " + score + "   Misses " + miss + "/5", 16, 30);
+    if (over) {
+        ctx.font = "32px system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText("Game over. Click to play again.", W / 2, H / 2);
+    }
+    requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
