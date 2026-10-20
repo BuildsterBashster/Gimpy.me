@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>My Arcade</title>
     <meta name="description" content="A small collection of browser games.">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=20261018">
 </head>
 <body>
     <nav class="rail" aria-label="Main menu">
@@ -51,6 +51,7 @@
         <button class="hint" type="button" id="hintStart"><kbd>A</kbd><span>Start</span></button>
     </div>
 
+    <div id="launchShade"></div>
     <section id="viewer" aria-label="Game viewer" hidden>
         <img class="bg-side" id="bgLeft" src="images/left.png" alt="" aria-hidden="true" draggable="false">
         <img class="bg-side" id="bgRight" src="images/right.png" alt="" aria-hidden="true" draggable="false">
@@ -59,14 +60,34 @@
             <h2 id="gameName">Game</h2>
             <a id="gameAuthor" href="#" target="_blank" rel="noopener" hidden></a>
         </div>
-        <div class="viewer-controls">
-            <a class="btn" id="repoBtn" href="#" target="_blank" rel="noopener noreferrer" hidden>View source</a>
-            <button class="btn" type="button" id="fsBtn">Fullscreen</button>
-            <button class="btn" type="button" id="tabBtn">Open in new tab</button>
-            <button class="btn primary" type="button" id="closeBtn">Close</button>
-        </div>
+        <button class="pause-btn" type="button" id="pauseBtn" aria-label="Open game menu" title="Menu">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 7h14M5 12h14M5 17h14"/></svg>
+        </button>
         <div id="stage">
             <iframe id="gameFrame" title="Game" allow="fullscreen; gamepad; autoplay"></iframe>
+        </div>
+
+        <div class="pause" id="pauseMenu" role="dialog" aria-modal="true" aria-label="Game menu">
+            <div class="pause-scrim"></div>
+            <div class="pause-profile">
+                <div class="pause-badge" id="pauseBadge"></div>
+                <div class="pause-profile-text"><span>P1</span><span id="pauseName"></span></div>
+            </div>
+            <div class="pause-ui">
+                <div class="pause-line"></div>
+                <div class="pause-list" role="menu">
+                    <button class="pause-item" type="button" role="menuitem" id="pmContinue">Continue</button>
+                    <button class="pause-item" type="button" role="menuitem" id="pmFullscreen">Fullscreen</button>
+                    <button class="pause-item" type="button" role="menuitem" id="pmTab">Open in New Tab</button>
+                    <button class="pause-item" type="button" role="menuitem" id="pmSource" hidden>View Source</button>
+                    <button class="pause-item" type="button" role="menuitem" id="pmExit">To Game Selection</button>
+                </div>
+            </div>
+            <div class="pause-hints">
+                <button class="hint" type="button" id="pmBack"><kbd>B</kbd><span>Back</span></button>
+                <button class="hint" type="button" id="pmOk"><kbd>A</kbd><span>OK</span></button>
+            </div>
+        </div>
         </div>
     </section>
 
@@ -83,6 +104,13 @@
                         <option value="light">Light</option>
                     </select>
                 </label>
+                <label class="row">Animations
+                    <select id="motionSelect">
+                        <option value="system">Follow device</option>
+                        <option value="always">Always play</option>
+                    </select>
+                </label>
+                <p class="muted" id="motionNote" hidden>This device is set to reduce motion, so animations are off. Choose “Always play” to turn them on.</p>
                 <div class="row">Play counts
                     <span class="row-actions">
                         <button class="btn" type="button" id="exportBtn">Export</button>
@@ -123,7 +151,7 @@
         <button class="hint" type="button" id="menuOk"><kbd>A</kbd><span>OK</span></button>
     </div>
 
-    <script src="games.js"></script>
-    <script src="script.js"></script>
+    <script src="games.js?v=20261018"></script>
+    <script src="script.js?v=20261018"></script>
 </body>
 </html>

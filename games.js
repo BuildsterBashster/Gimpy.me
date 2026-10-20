@@ -17,8 +17,8 @@
     tile      short text on the placeholder tile (used when thumb is empty)
     author    optional
     authorUrl optional link on the author name
-    repo      optional GitHub (or any source) link. If set, the viewer shows a
-              "View source" button for it. Leave "" to hide the button
+    repo      optional GitHub (or any source) link. If set, the game menu shows a
+              "View Source" item for it. Leave "" to hide the item
     url       the iframe link. Leave "" to use the Dot Catcher template
     thumb     optional image path, e.g. "games/my-game/thumb.png"
               (also used for the round badge in the top-left of the viewer)
@@ -144,6 +144,7 @@ window.GAMES = [
         url: "https://shar-wasm.cjoseph.workers.dev/?skipmovie",            // <-- SLOT 9: paste the iframe link here
         thumb: "images/sh&r.png",
         aspect: "16/9",         // optional window shape, e.g. "16/9" or "4/3". "" = default
+        newTab: true,           // opens in its own tab (needs SharedArrayBuffer, which can't work in an iframe here)
         featured: true
     },
     {

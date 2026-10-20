@@ -17,7 +17,7 @@ To use a slot for your own game, paste the iframe link into that slot's `url`:
     tile: "3",
     author: "Your name",
     authorUrl: "",
-    repo: "https://github.com/you/my-game",   // optional, shows a "View source" button
+    repo: "https://github.com/you/my-game",   // optional, adds a "View Source" item to the game menu
     url: "games/my-game/index.html",   // or "https://example.com/my-game/"
     thumb: "games/my-game/thumb.png",
     featured: false
@@ -71,3 +71,9 @@ least one slot has `featured: true`.
 
 The bottom hint buttons do the same with a mouse or touch. Contact link, footer
 text and theme live in Settings (the sliders icon).
+
+## Games that need their own tab
+
+Set `newTab: true` on a slot and the game opens in a new browser tab instead of the viewer.
+Use it for games that need `SharedArrayBuffer` / WASM threads (cross-origin isolation),
+which can't work inside an iframe on a host that can't send COOP/COEP headers.

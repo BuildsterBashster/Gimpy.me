@@ -14,10 +14,11 @@
             const parsed = JSON.parse(localStorage.getItem(STORE_KEY) || "{}");
             return {
                 plays: parsed && typeof parsed.plays === "object" && parsed.plays ? parsed.plays : {},
-                theme: parsed && parsed.theme === "light" ? "light" : "dark"
+                theme: parsed && parsed.theme === "light" ? "light" : "dark",
+                motion: parsed && parsed.motion === "always" ? "always" : "system"
             };
         } catch (e) {
-            return { plays: {}, theme: "dark" };
+            return { plays: {}, theme: "dark", motion: "system" };
         }
     }
     function saveData() {
@@ -79,6 +80,7 @@
         tile.addEventListener("click", () => openGame(game.id));
         tile.addEventListener("focus", () => { selId = game.id; });
         tile.addEventListener("mouseenter", () => {
+            if (busy || performance.now() < hoverLockUntil) return;   // a resting pointer must not steal the selection mid-transition
             if (!(document.activeElement instanceof HTMLInputElement)) tile.focus({ preventScroll: true });
         });
         return tile;
@@ -250,9 +252,18 @@
         }
     }
 
-    function openGame(id) {
+    function openGame(id, instant) {
+        if (busy) return;
         const game = GAMES.find((g) => String(g.id) === String(id));
         if (!game) return;
+        if (game.newTab) {
+            /* Games that need cross-origin isolation (SharedArrayBuffer) can't run inside this page's iframe,
+               so they open as their own top-level tab instead of in the viewer. */
+            data.plays[game.id] = (data.plays[game.id] || 0) + 1;
+            saveData();
+            window.open(gameUrl(game), "_blank", "noopener");
+            return;
+        }
         currentGame = game;
         $("gameName").textContent = game.name;
         const author = $("gameAuthor");
@@ -265,17 +276,12 @@
         } else {
             author.hidden = true;
         }
-        const repo = $("repoBtn");
-        if (/^https?:\/\//i.test(game.repo || "")) {
-            repo.href = game.repo;
-            repo.hidden = false;
-        } else {
-            repo.hidden = true;
-            repo.removeAttribute("href");
-        }
         setBadge(game);
         ratio = parseAspect(game.aspect) || parseAspect(SITE.defaultAspect) || 1120 / 1008;
         $("viewer").style.setProperty("--ar", String(ratio));
+        const tile = instant ? null : tiles().find((el) => String(el.dataset.id) === String(game.id));
+        const animate = !!tile && !reduced() && tile.offsetParent !== null;
+        if (animate) $("viewer").classList.add("pre", "launching");
         $("viewer").hidden = false;
         layoutViewer();
         $("gameFrame").src = gameUrl(game);   // load only once the window has a real size
@@ -283,11 +289,72 @@
         data.plays[game.id] = (data.plays[game.id] || 0) + 1;
         saveData();
         history.replaceState(null, "", "#" + game.id);
-        $("closeBtn").focus();
+        if (animate) launch(tile); else $("pauseBtn").focus();
     }
 
-    function closeGame() {
+    /* ---------- launch / leave transitions ----------
+       Timings measured frame by frame from a 30fps recording of the real app. Times are seconds from the button press. */
+    const deviceWantsLessMotion = () => !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+    const reduced = () => data.motion !== "always" && deviceWantsLessMotion();
+    let busy = false;
+    let hoverLockUntil = 0;
+    const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+    /* Piecewise-linear animation through measured samples: keys = [[t, ...values]], fn(...values) -> css */
+    function play(el, total, keys, fn) {
+        if (!el || reduced()) return null;
+        const frames = keys.map((k) => Object.assign({ offset: Math.min(1, k[0] / total) }, fn(...k.slice(1))));
+        return el.animate(frames, { duration: total * 1000, fill: "both", easing: "linear" });
+    }
+    const TILE_ZOOM = 1.1;   // the selected tile's resting scale (see .tile:focus)
+    const LAUNCH = {
+        /* selected tile: squashes to 91% in a frame, eases back, then drifts as the screen goes dark: [t, scale, dx, dy] (dx/dy as tile fractions) */
+        tile: [[0, 1, 0, 0], [.0125, .91, 0, 0], [.083, .91, 0, 0], [.117, .93, 0, 0], [.15, .94, 0, 0], [.183, .96, 0, 0], [.217, .97, 0, 0],
+               [.25, .98, 0, 0], [.283, .98, .019, -.019], [.317, .97, .033, -.037], [.35, .96, .047, -.047], [.383, .96, .056, -.05],
+               [.417, .95, .061, -.059], [.45, .95, .066, -.062], [.6, .95, .066, -.062]],
+        /* the library, rail and hints fade to black (ease-in) */
+        shade: [[0, 0], [.283, .023], [.317, .055], [.35, .096], [.383, .14], [.417, .188], [.45, .242], [.483, .31], [.517, .388],
+                [.55, .477], [.583, .6], [.617, .791], [.65, .995], [.7, 1]],
+        reveal: .483,   // the game window appears at 92% and grows to full size, out of the tile's corner
+        pop: [[0, .916], [.034, .95], [.067, .974], [.1, .991], [.134, 1]],
+        done: .65, btnFade: [.817, .2],
+    };
+    const LEAVE = {
+        /* after the menu has closed: the window shrinks into the tile while the library fades back in */
+        shade: [[0, 1], [.033, .73], [.067, .59], [.1, .47], [.133, .4], [.167, .31], [.2, .24], [.233, .18], [.267, .12], [.3, .07], [.333, .02], [.367, 0]],
+        win: [[0, 1, 1], [.033, .628, .93], [.067, .486, .88], [.1, .387, .87], [.133, .312, .82], [.167, .26, .67], [.2, .2, 0]],
+        /* the tile stays squashed for a moment, then pops back */
+        tile: [[0, .91], [.4, .91], [.433, .93], [.467, .96], [.5, .98], [.533, .99], [.567, 1]],
+        menuClose: .25,
+    };
+    const tileFor = (id) => tiles().find((el) => String(el.dataset.id) === String(id));
+
+    async function launch(tile) {
+        busy = true;
+        const t0 = performance.now();
+        const at = (s) => sleep(Math.max(0, t0 + s * 1000 - performance.now()));
+        const shade = $("launchShade"), v = $("viewer");
+        shade.style.display = "block";
+        const anims = [
+            play(tile, .6, LAUNCH.tile, (m, x, y) => ({ transform: `translate(${x * 100}%, ${y * 100}%) scale(${TILE_ZOOM * m})` })),
+            play(shade, .7, LAUNCH.shade, (o) => ({ opacity: o })),
+        ];
+        await at(LAUNCH.reveal);
+        v.classList.remove("pre");
+        anims.push(play($("stage"), .134, LAUNCH.pop, (s) => ({ transform: `scale(${s})` })));
+        await at(LAUNCH.done);
+        v.classList.remove("launching");
+        shade.style.display = "none";
+        anims.forEach((a) => a && a.cancel());
+        const btn = $("pauseBtn");
+        if (!reduced()) btn.animate([{ opacity: 0 }, { opacity: .7 }], { duration: LAUNCH.btnFade[1] * 1000, delay: (LAUNCH.btnFade[0] - LAUNCH.done) * 1000, fill: "backwards" });
+        busy = false;
+        if (currentGame) btn.focus();
+    }
+
+    function closeGameNow() {
         const closedId = currentGame ? currentGame.id : selId;
+        $("pauseMenu").classList.remove("on");
+        $("viewer").classList.remove("menu-on", "pre", "launching", "leaving");
         $("viewer").hidden = true;
         $("gameFrame").src = "about:blank";
         document.body.style.overflow = "";
@@ -297,19 +364,110 @@
         render(true);
     }
 
-    $("closeBtn").addEventListener("click", closeGame);
-    $("fsBtn").addEventListener("click", () => {
+    /* Game -> library: the menu closes, then the window zooms back into the tile */
+    async function leave() {
+        if (busy || !currentGame) return;
+        busy = true;
+        const lead = pauseOpen() ? LEAVE.menuClose : 0;
+        hoverLockUntil = performance.now() + lead * 1000 + 1000;
+        if (lead) closePause(false);
+        const t0 = performance.now();
+        const at = (s) => sleep(Math.max(0, t0 + s * 1000 - performance.now()));
+        await at(lead);
+        const v = $("viewer"), shade = $("launchShade"), stage = $("stage");
+        v.classList.add("leaving");
+        shade.style.display = "block"; shade.style.opacity = "1";
+        const closedId = currentGame.id;
+        history.replaceState(null, "", location.pathname + location.search);
+        selId = closedId;
+        document.body.style.overflow = "";
+        render(true);                                   // the library appears underneath, hidden by the shade
+        const anims = [
+            play(shade, .367, LEAVE.shade, (o) => ({ opacity: o })),
+            play(stage, .2, LEAVE.win, (s, a) => ({ transform: `scale(${s})`, opacity: a })),
+            play(tileFor(closedId), .567, LEAVE.tile, (m) => ({ transform: `scale(${TILE_ZOOM * m})` })),
+        ];
+        await at(lead + .2);
+        v.hidden = true;
+        v.classList.remove("leaving", "menu-on");
+        $("gameFrame").src = "about:blank";
+        currentGame = null;
+        if (anims[1]) anims[1].cancel();
+        busy = false;
+        await at(lead + .367);
+        shade.style.display = "none"; shade.style.opacity = "";
+        if (anims[0]) anims[0].cancel();
+        await at(lead + .567);
+        if (anims[2]) anims[2].cancel();
+    }
+
+    function closeGame(instant) {
+        if (instant === true || reduced() || !currentGame) return closeGameNow();
+        leave();
+    }
+
+    /* ---------- in-game menu (opened by the small button at the bottom right) ---------- */
+    const PAUSE_IDS = ["pmContinue", "pmFullscreen", "pmTab", "pmSource", "pmExit"];
+    const pauseItems = () => PAUSE_IDS.map($).filter((el) => !el.hidden);
+    const pauseOpen = () => $("pauseMenu").classList.contains("on");
+
+    function openPause() {
+        if (!currentGame || pauseOpen() || busy) return;
+        const src = $("badge"), dst = $("pauseBadge");
+        dst.replaceChildren(...Array.from(src.cloneNode(true).childNodes));
+        dst.style.background = src.style.background;
+        $("pauseName").textContent = currentGame.name;
+        $("pmSource").hidden = !/^https?:\/\//i.test(currentGame.repo || "");
+        $("pauseMenu").classList.add("on");
+        $("viewer").classList.add("menu-on");
+        $("pmContinue").focus();
+    }
+
+    /* Hides the menu and hands the keyboard back to the game */
+    function closePause(resume = true) {
+        $("pauseMenu").classList.remove("on");
+        $("viewer").classList.remove("menu-on");
+        if (resume) try { $("gameFrame").focus(); } catch (_) { /* ignore */ }
+    }
+
+    function movePause(step) {
+        const items = pauseItems();
+        const i = items.indexOf(document.activeElement);
+        const next = i < 0 ? (step > 0 ? 0 : items.length - 1) : (i + step + items.length) % items.length;
+        items[next].focus();
+    }
+
+    $("pauseBtn").addEventListener("click", openPause);
+    $("pmContinue").addEventListener("click", () => closePause());
+    $("pmFullscreen").addEventListener("click", () => {
         const frame = $("gameFrame");
+        closePause();
         if (frame.requestFullscreen) frame.requestFullscreen().catch(() => {});
     });
-    $("tabBtn").addEventListener("click", () => {
+    $("pmTab").addEventListener("click", () => {
         if (currentGame) window.open(gameUrl(currentGame), "_blank", "noopener");
+        closePause();
+    });
+    $("pmSource").addEventListener("click", () => {
+        if (currentGame && /^https?:\/\//i.test(currentGame.repo || "")) window.open(currentGame.repo, "_blank", "noopener");
+        closePause();
+    });
+    $("pmExit").addEventListener("click", () => closeGame());
+    $("pmBack").addEventListener("click", () => closePause());
+    $("pmOk").addEventListener("click", () => {
+        const el = document.activeElement;
+        if (el && el.classList.contains("pause-item")) el.click();
+    });
+    PAUSE_IDS.forEach((id) => {
+        $(id).addEventListener("mouseenter", () => $(id).focus({ preventScroll: true }));
     });
 
     /* ---------- settings popup ---------- */
     function openPopup() {
         $("settingsMsg").textContent = "";
         $("themeSelect").value = data.theme;
+        $("motionSelect").value = data.motion;
+        $("motionNote").hidden = !(deviceWantsLessMotion() && data.motion !== "always");
         $("overlay").hidden = false;
         $("themeSelect").focus();
     }
@@ -320,6 +478,14 @@
     $("overlay").addEventListener("click", (e) => { if (e.target === $("overlay")) closePopup(); });
 
     function applyTheme() { document.documentElement.dataset.theme = data.theme; }
+    function applyMotion() { document.documentElement.dataset.motion = data.motion; }
+    applyMotion();
+    $("motionSelect").addEventListener("change", (e) => {
+        data.motion = e.target.value === "always" ? "always" : "system";
+        saveData();
+        applyMotion();
+        $("motionNote").hidden = !(deviceWantsLessMotion() && data.motion !== "always");
+    });
     $("themeSelect").addEventListener("change", (e) => {
         data.theme = e.target.value === "light" ? "light" : "dark";
         applyTheme();
@@ -345,6 +511,7 @@
                 if (!parsed || typeof parsed.plays !== "object") throw new Error("bad file");
                 data.plays = parsed.plays;
                 if (parsed.theme === "light" || parsed.theme === "dark") data.theme = parsed.theme;
+                if (parsed.motion === "always" || parsed.motion === "system") data.motion = parsed.motion;
                 applyTheme();
                 saveData();
                 render();
@@ -385,19 +552,23 @@
 
 
     /* ---------- expanded menu: the red rail grows in place ---------- */
+    let openingTimer = 0;
     function menuOpen() { return document.body.classList.contains("menu-open"); }
     function menuItems() { return Array.from(document.querySelectorAll(".rail-btn")).filter((el) => !el.hidden); }
     function openMenu() {
         if (menuOpen()) return;
         void document.querySelector(".rail").offsetWidth;   // settle the collapsed layout first so the open animates
-        document.body.classList.add("menu-open");
+        document.body.classList.add("menu-open", "menu-opening");
+        clearTimeout(openingTimer);
+        openingTimer = setTimeout(() => document.body.classList.remove("menu-opening"), 233);   // label turns red once the bar has settled
         const items = menuItems();
         const start = (view === "featured" && !$("navFeatured").hidden) ? $("navFeatured") : $("navAll");
         (items.includes(start) ? start : items[0]).focus({ preventScroll: true });
     }
     function closeMenu(refocus) {
         if (!menuOpen()) return;
-        document.body.classList.remove("menu-open");
+        clearTimeout(openingTimer);
+        document.body.classList.remove("menu-open", "menu-opening");
         if (refocus !== false) focusTile(selId, { preventScroll: true });
     }
     document.querySelectorAll(".rail-btn").forEach((btn) => {
@@ -419,11 +590,24 @@
     }
 
     document.addEventListener("keydown", (e) => {
+        if (busy) return;   // a launch / leave transition is running
         const key = e.key;
         const typing = e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement;
 
-        /* viewer open: only N (hide backdrop) and Escape */
+        /* viewer open: game menu keys, otherwise only N (hide backdrop) and Escape */
         if (!$("viewer").hidden) {
+            if (pauseOpen() && $("overlay").hidden) {
+                if (e.ctrlKey || e.metaKey || e.altKey) return;
+                if (key === "ArrowDown" || key === "Tab" && !e.shiftKey) { e.preventDefault(); movePause(1); }
+                else if (key === "ArrowUp" || key === "Tab") { e.preventDefault(); movePause(-1); }
+                else if (key === "Escape" || key === "b" || key === "B") { e.preventDefault(); closePause(); }
+                else if (key === "a" || key === "A") {
+                    e.preventDefault();
+                    const el = document.activeElement;
+                    (el && el.classList.contains("pause-item") ? el : $("pmContinue")).click();
+                }
+                return;   /* Enter / Space click the focused item natively */
+            }
             if ((key === "n" || key === "N") && $("overlay").hidden && !e.ctrlKey && !e.metaKey && !e.altKey) {
                 $("viewer").classList.toggle("no-bg");   // debug: hide the side backdrop
             } else if (key === "Escape") {
@@ -494,6 +678,6 @@
     focusTile(null, { preventScroll: true });
 
     const hash = location.hash.slice(1);
-    if (hash) openGame(hash);
+    if (hash) openGame(hash, true);
     else setTimeout(openMenu, 150);   // menu opens (animated) when the site first loads
 })();

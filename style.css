@@ -9,9 +9,45 @@
     --accent: #f2b134;
     --accent-ink: #1a1405;
     --rail-bg: #ff0000;
+    /* Pause menu easing, sampled frame by frame from a Switch recording */
+    --PD: 333.33ms;
+    --e-pm-a-open: linear(0, 0.236 2.5%, 0.4 5%, 0.488 7.5%, 0.553 10%, 0.605 12.5%, 0.65 15%, 0.692 17.5%, 0.728 20%, 0.76 22.5%, 0.79 25%, 0.819 27.5%, 0.845 30%, 0.869 32.5%, 0.89 35%, 0.908 37.5%, 0.923 40%, 0.937 42.5%, 0.95 45%, 0.962 47.5%, 0.974 50%, 0.984 52.5%, 0.99 55%, 0.994 57.5%, 0.997 60%, 0.999 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-a-close: linear(0.003, 0.006 2.5%, 0.01 5%, 0.016 7.5%, 0.026 10%, 0.038 12.5%, 0.05 15%, 0.063 17.5%, 0.077 20%, 0.092 22.5%, 0.11 25%, 0.131 27.5%, 0.155 30%, 0.181 32.5%, 0.21 35%, 0.24 37.5%, 0.272 40%, 0.308 42.5%, 0.35 45%, 0.395 47.5%, 0.447 50%, 0.512 52.5%, 0.6 55%, 0.764 57.5%, 1 60%, 1 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-s-open: linear(0, 0.053 2.5%, 0.1 5%, 0.14 7.5%, 0.175 10%, 0.211 12.5%, 0.25 15%, 0.296 17.5%, 0.346 20%, 0.399 22.5%, 0.45 25%, 0.5 27.5%, 0.55 30%, 0.6 32.5%, 0.65 35%, 0.703 37.5%, 0.758 40%, 0.809 42.5%, 0.85 45%, 0.881 47.5%, 0.908 50%, 0.931 52.5%, 0.95 55%, 0.967 57.5%, 0.983 60%, 0.995 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-s-close: linear(0.017, 0.033 2.5%, 0.05 5%, 0.069 7.5%, 0.092 10%, 0.119 12.5%, 0.15 15%, 0.191 17.5%, 0.242 20%, 0.297 22.5%, 0.35 25%, 0.4 27.5%, 0.45 30%, 0.5 32.5%, 0.55 35%, 0.601 37.5%, 0.654 40%, 0.704 42.5%, 0.75 45%, 0.789 47.5%, 0.825 50%, 0.86 52.5%, 0.9 55%, 0.947 57.5%, 1 60%, 1 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-blur-open: linear(0, 0 2.5%, 0 5%, 0.006 7.5%, 0.02 10%, 0.034 12.5%, 0.04 15%, 0.04 17.5%, 0.04 20%, 0.04 22.5%, 0.04 25%, 0.054 27.5%, 0.089 30%, 0.137 32.5%, 0.19 35%, 0.259 37.5%, 0.35 40%, 0.449 42.5%, 0.54 45%, 0.625 47.5%, 0.711 50%, 0.789 52.5%, 0.85 55%, 0.902 57.5%, 0.95 60%, 0.986 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-blur-close: linear(0.05, 0.098 2.5%, 0.15 5%, 0.211 7.5%, 0.289 10%, 0.375 12.5%, 0.46 15%, 0.551 17.5%, 0.65 20%, 0.741 22.5%, 0.81 25%, 0.863 27.5%, 0.911 30%, 0.946 32.5%, 0.96 35%, 0.96 37.5%, 0.96 40%, 0.96 42.5%, 0.96 45%, 0.966 47.5%, 0.98 50%, 0.994 52.5%, 1 55%, 1 57.5%, 1 60%, 1 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-dim-open: linear(0, 0.026 2.5%, 0.053 5%, 0.081 7.5%, 0.11 10%, 0.141 12.5%, 0.176 15%, 0.219 17.5%, 0.268 20%, 0.322 22.5%, 0.376 25%, 0.432 27.5%, 0.492 30%, 0.552 32.5%, 0.608 35%, 0.662 37.5%, 0.714 40%, 0.764 42.5%, 0.808 45%, 0.849 47.5%, 0.888 50%, 0.922 52.5%, 0.947 55%, 0.966 57.5%, 0.983 60%, 0.995 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-dim-close: linear(0.017, 0.034 2.5%, 0.053 5%, 0.078 7.5%, 0.112 10%, 0.151 12.5%, 0.192 15%, 0.236 17.5%, 0.286 20%, 0.338 22.5%, 0.392 25%, 0.448 27.5%, 0.508 30%, 0.568 32.5%, 0.624 35%, 0.678 37.5%, 0.732 40%, 0.781 42.5%, 0.824 45%, 0.859 47.5%, 0.89 50%, 0.919 52.5%, 0.947 55%, 0.974 57.5%, 1 60%, 1 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-hout-open: linear(0, 0 2.5%, 0 5%, 0.007 7.5%, 0.067 10%, 0.128 12.5%, 0.188 15%, 0.248 17.5%, 0.308 20%, 0.369 22.5%, 0.429 25%, 0.489 27.5%, 0.549 30%, 0.61 32.5%, 0.67 35%, 0.73 37.5%, 0.79 40%, 0.851 42.5%, 0.911 45%, 0.971 47.5%, 1 50%, 1 52.5%, 1 55%, 1 57.5%, 1 60%, 1 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-hout-close: linear(0, 0 2.5%, 0 5%, 0 7.5%, 0 10%, 0.029 12.5%, 0.089 15%, 0.149 17.5%, 0.21 20%, 0.27 22.5%, 0.33 25%, 0.39 27.5%, 0.451 30%, 0.511 32.5%, 0.571 35%, 0.631 37.5%, 0.692 40%, 0.752 42.5%, 0.812 45%, 0.872 47.5%, 0.933 50%, 0.993 52.5%, 1 55%, 1 57.5%, 1 60%, 1 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-hin-open: linear(0, 0 2.5%, 0 5%, 0 7.5%, 0 10%, 0 12.5%, 0 15%, 0 17.5%, 0 20%, 0 22.5%, 0 25%, 0 27.5%, 0 30%, 0 32.5%, 0 35%, 0 37.5%, 0 40%, 0 42.5%, 0 45%, 0 47.5%, 0.085 50%, 0.374 52.5%, 0.4 55%, 0.425 57.5%, 0.445 60%, 0.465 62.5%, 0.49 65%, 0.523 67.5%, 0.563 70%, 0.607 72.5%, 0.65 75%, 0.694 77.5%, 0.739 80%, 0.785 82.5%, 0.83 85%, 0.881 87.5%, 0.937 90%, 0.982 92.5%, 1 95%, 1 97.5%, 1 100%);
+    --e-pm-hin-close: linear(0, 0.125 2.5%, 0.25 5%, 0.375 7.5%, 0.5 10%, 0.625 12.5%, 0.75 15%, 0.875 17.5%, 1 20%, 1 22.5%, 1 25%, 1 27.5%, 1 30%, 1 32.5%, 1 35%, 1 37.5%, 1 40%, 1 42.5%, 1 45%, 1 47.5%, 1 50%, 1 52.5%, 1 55%, 1 57.5%, 1 60%, 1 62.5%, 1 65%, 1 67.5%, 1 70%, 1 72.5%, 1 75%, 1 77.5%, 1 80%, 1 82.5%, 1 85%, 1 87.5%, 1 90%, 1 92.5%, 1 95%, 1 97.5%, 1 100%);
+
+    /* Menu open/close easing, sampled frame by frame from a 30fps Switch recording (t=0 is the input frame) */
+    --D: 366.67ms;
+    --e-w-open: linear(0, 0.013 2.273%, 0.031 4.545%, 0.052 6.818%, 0.077 9.091%, 0.107 11.364%, 0.143 13.636%, 0.188 15.909%, 0.245 18.182%, 0.313 20.455%, 0.388 22.727%, 0.486 25%, 0.607 27.273%, 0.728 29.545%, 0.827 31.818%, 0.908 34.091%, 0.986 36.364%, 1.045 38.636%, 1.071 40.909%, 1.076 43.182%, 1.079 45.455%, 1.081 47.727%, 1.082 50%, 1.073 52.273%, 1.055 54.545%, 1.034 56.818%, 1.02 59.091%, 1.013 61.364%, 1.006 63.636%, 1.002 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-icon-open: linear(0, 0.013 2.273%, 0.031 4.545%, 0.052 6.818%, 0.077 9.091%, 0.107 11.364%, 0.143 13.636%, 0.188 15.909%, 0.245 18.182%, 0.313 20.455%, 0.388 22.727%, 0.486 25%, 0.607 27.273%, 0.728 29.545%, 0.827 31.818%, 0.908 34.091%, 0.986 36.364%, 1 38.636%, 1 40.909%, 1 43.182%, 1 45.455%, 1 47.727%, 1 50%, 1 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-pl-open: linear(0, 0.098 2.273%, 0.23 4.545%, 0.413 6.818%, 0.62 9.091%, 0.858 11.364%, 1 13.636%, 1 15.909%, 1 18.182%, 1 20.455%, 1 22.727%, 1 25%, 1 27.273%, 1 29.545%, 1 31.818%, 1 34.091%, 1 36.364%, 1 38.636%, 1 40.909%, 1 43.182%, 1 45.455%, 1 47.727%, 1 50%, 1 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-pw-open: linear(0, 0.018 2.273%, 0.042 4.545%, 0.073 6.818%, 0.109 9.091%, 0.151 11.364%, 0.193 13.636%, 0.236 15.909%, 0.29 18.182%, 0.353 20.455%, 0.424 22.727%, 0.516 25%, 0.63 27.273%, 0.744 29.545%, 0.837 31.818%, 0.913 34.091%, 0.987 36.364%, 1.042 38.636%, 1.067 40.909%, 1.071 43.182%, 1.074 45.455%, 1.076 47.727%, 1.077 50%, 1.069 52.273%, 1.052 54.545%, 1.032 56.818%, 1.019 59.091%, 1.012 61.364%, 1.006 63.636%, 1.002 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-lab-open: linear(0, 0.102 2.273%, 0.19 4.545%, 0.264 6.818%, 0.331 9.091%, 0.392 11.364%, 0.45 13.636%, 0.505 15.909%, 0.557 18.182%, 0.605 20.455%, 0.65 22.727%, 0.691 25%, 0.729 27.273%, 0.765 29.545%, 0.8 31.818%, 0.837 34.091%, 0.873 36.364%, 0.906 38.636%, 0.93 40.909%, 0.947 43.182%, 0.96 45.455%, 0.972 47.727%, 0.98 50%, 0.987 52.273%, 0.994 54.545%, 0.998 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-who-open: linear(0, 0.236 2.273%, 0.4 4.545%, 0.485 6.818%, 0.547 9.091%, 0.598 11.364%, 0.65 13.636%, 0.707 15.909%, 0.762 18.182%, 0.812 20.455%, 0.855 22.727%, 0.893 25%, 0.93 27.273%, 0.959 29.545%, 0.976 31.818%, 0.985 34.091%, 0.993 36.364%, 0.998 38.636%, 1 40.909%, 1 43.182%, 1 45.455%, 1 47.727%, 1 50%, 1 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-blur-open: linear(0, 0 2.273%, 0 4.545%, 0 6.818%, 0 9.091%, 0.015 11.364%, 0.03 13.636%, 0.03 15.909%, 0.03 18.182%, 0.03 20.455%, 0.03 22.727%, 0.041 25%, 0.07 27.273%, 0.112 29.545%, 0.16 31.818%, 0.236 34.091%, 0.346 36.364%, 0.463 38.636%, 0.56 40.909%, 0.632 43.182%, 0.696 45.455%, 0.755 47.727%, 0.81 50%, 0.87 52.273%, 0.932 54.545%, 0.98 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-dim-open: linear(0, 0.004 2.273%, 0.011 4.545%, 0.019 6.818%, 0.03 9.091%, 0.044 11.364%, 0.06 13.636%, 0.084 15.909%, 0.117 18.182%, 0.156 20.455%, 0.2 22.727%, 0.252 25%, 0.314 27.273%, 0.381 29.545%, 0.447 31.818%, 0.514 34.091%, 0.583 36.364%, 0.652 38.636%, 0.714 40.909%, 0.774 43.182%, 0.832 45.455%, 0.884 47.727%, 0.921 50%, 0.949 52.273%, 0.975 54.545%, 0.993 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-hl-open: linear(0, 0 2.273%, 0 4.545%, 0 6.818%, 0.01 9.091%, 0.075 11.364%, 0.14 13.636%, 0.205 15.909%, 0.27 18.182%, 0.335 20.455%, 0.4 22.727%, 0.465 25%, 0.53 27.273%, 0.595 29.545%, 0.66 31.818%, 0.725 34.091%, 0.79 36.364%, 0.855 38.636%, 0.919 40.909%, 0.984 43.182%, 1 45.455%, 1 47.727%, 1 50%, 1 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-hm-open: linear(0, 0 2.273%, 0 4.545%, 0 6.818%, 0 9.091%, 0 11.364%, 0 13.636%, 0 15.909%, 0 18.182%, 0 20.455%, 0 22.727%, 0 25%, 0 27.273%, 0 29.545%, 0 31.818%, 0 34.091%, 0 36.364%, 0 38.636%, 0 40.909%, 0.182 43.182%, 0.341 45.455%, 0.381 47.727%, 0.41 50%, 0.44 52.273%, 0.466 54.545%, 0.491 56.818%, 0.52 59.091%, 0.555 61.364%, 0.595 63.636%, 0.637 65.909%, 0.68 68.182%, 0.725 70.455%, 0.771 72.727%, 0.818 75%, 0.86 77.273%, 0.904 79.545%, 0.95 81.818%, 0.986 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-w-close: linear(0, 0.001 2.273%, 0.005 4.545%, 0.013 6.818%, 0.028 9.091%, 0.048 11.364%, 0.071 13.636%, 0.101 15.909%, 0.141 18.182%, 0.19 20.455%, 0.245 22.727%, 0.312 25%, 0.395 27.273%, 0.487 29.545%, 0.58 31.818%, 0.696 34.091%, 0.831 36.364%, 0.943 38.636%, 0.99 40.909%, 0.988 43.182%, 0.985 45.455%, 0.982 47.727%, 0.98 50%, 0.98 52.273%, 0.98 54.545%, 0.98 56.818%, 0.98 59.091%, 0.98 61.364%, 0.982 63.636%, 0.983 65.909%, 0.985 68.182%, 0.988 70.455%, 0.993 72.727%, 0.998 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-icon-close: linear(0, 0.241 2.273%, 0.41 4.545%, 0.503 6.818%, 0.573 9.091%, 0.629 11.364%, 0.68 13.636%, 0.73 15.909%, 0.776 18.182%, 0.817 20.455%, 0.85 22.727%, 0.879 25%, 0.904 27.273%, 0.925 29.545%, 0.94 31.818%, 0.95 34.091%, 0.957 36.364%, 0.963 38.636%, 0.97 40.909%, 0.979 43.182%, 0.989 45.455%, 0.997 47.727%, 1 50%, 1 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-pl-close: linear(2.308, 2.308 0.02%, 1.993 2.273%, 1.772 4.545%, 1.65 6.818%, 1.559 9.091%, 1.486 11.364%, 1.418 13.636%, 1.353 15.909%, 1.292 18.182%, 1.24 20.455%, 1.196 22.727%, 1.159 25%, 1.125 27.273%, 1.098 29.545%, 1.078 31.818%, 1.066 34.091%, 1.056 36.364%, 1.048 38.636%, 1.039 40.909%, 1.028 43.182%, 1.015 45.455%, 1.004 47.727%, 1 50%, 1 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-lab-close: linear(0, 0.065 2.273%, 0.12 4.545%, 0.163 6.818%, 0.2 9.091%, 0.234 11.364%, 0.27 13.636%, 0.306 15.909%, 0.342 18.182%, 0.379 20.455%, 0.42 22.727%, 0.464 25%, 0.511 27.273%, 0.563 29.545%, 0.62 31.818%, 0.695 34.091%, 0.784 36.364%, 0.867 38.636%, 0.92 40.909%, 0.95 43.182%, 0.976 45.455%, 0.993 47.727%, 1 50%, 1 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-who-close: linear(0, 0 2.273%, 0 4.545%, 0.005 6.818%, 0.019 9.091%, 0.038 11.364%, 0.06 13.636%, 0.09 15.909%, 0.132 18.182%, 0.18 20.455%, 0.23 22.727%, 0.281 25%, 0.335 27.273%, 0.395 29.545%, 0.46 31.818%, 0.54 34.091%, 0.633 36.364%, 0.724 38.636%, 0.8 40.909%, 0.867 43.182%, 0.931 45.455%, 0.981 47.727%, 1 50%, 1 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-blur-close: linear(0, 0.102 2.273%, 0.19 4.545%, 0.258 6.818%, 0.315 9.091%, 0.372 11.364%, 0.44 13.636%, 0.537 15.909%, 0.654 18.182%, 0.764 20.455%, 0.84 22.727%, 0.888 25%, 0.93 27.273%, 0.959 29.545%, 0.97 31.818%, 0.97 34.091%, 0.97 36.364%, 0.97 38.636%, 0.97 40.909%, 0.975 43.182%, 0.985 45.455%, 0.995 47.727%, 1 50%, 1 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-dim-close: linear(0, 0.038 2.273%, 0.08 4.545%, 0.126 6.818%, 0.177 9.091%, 0.23 11.364%, 0.286 13.636%, 0.347 15.909%, 0.413 18.182%, 0.48 20.455%, 0.545 22.727%, 0.61 25%, 0.677 27.273%, 0.738 29.545%, 0.79 31.818%, 0.834 34.091%, 0.875 36.364%, 0.908 38.636%, 0.932 40.909%, 0.948 43.182%, 0.961 45.455%, 0.972 47.727%, 0.98 50%, 0.987 52.273%, 0.994 54.545%, 0.998 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-hm-close: linear(0, 0 2.273%, 0 4.545%, 0 6.818%, 0 9.091%, 0 11.364%, 0 13.636%, 0 15.909%, 0.033 18.182%, 0.097 20.455%, 0.16 22.727%, 0.224 25%, 0.288 27.273%, 0.351 29.545%, 0.415 31.818%, 0.478 34.091%, 0.542 36.364%, 0.606 38.636%, 0.669 40.909%, 0.733 43.182%, 0.796 45.455%, 0.86 47.727%, 0.924 50%, 0.987 52.273%, 1 54.545%, 1 56.818%, 1 59.091%, 1 61.364%, 1 63.636%, 1 65.909%, 1 68.182%, 1 70.455%, 1 72.727%, 1 75%, 1 77.273%, 1 79.545%, 1 81.818%, 1 84.091%, 1 86.364%, 1 88.636%, 1 90.909%, 1 93.182%, 1 95.455%, 1 97.727%, 1 100%);
+    --e-hl-close: linear(0, 0 2.273%, 0 4.545%, 0 6.818%, 0 9.091%, 0 11.364%, 0 13.636%, 0 15.909%, 0 18.182%, 0 20.455%, 0 22.727%, 0 25%, 0 27.273%, 0 29.545%, 0 31.818%, 0 34.091%, 0 36.364%, 0 38.636%, 0 40.909%, 0 43.182%, 0 45.455%, 0 47.727%, 0 50%, 0.043 52.273%, 0.335 54.545%, 0.388 56.818%, 0.42 59.091%, 0.449 61.364%, 0.471 63.636%, 0.493 65.909%, 0.52 68.182%, 0.556 70.455%, 0.598 72.727%, 0.644 75%, 0.69 77.273%, 0.738 79.545%, 0.789 81.818%, 0.838 84.091%, 0.88 86.364%, 0.919 88.636%, 0.958 90.909%, 0.988 93.182%, 1 95.455%, 1 97.727%, 1 100%);
     --hint-bg: rgba(0, 0, 0, .82);
     --radius: 10px;
-    --rail: clamp(54px, 6vw, 112px);
+    --rail: clamp(54px, 7.8125vw, 150px);   /* 100px on the 1280x720 reference */
     --cols: 8;
     color-scheme: dark;
 }
@@ -50,82 +86,92 @@ input::placeholder { color: var(--muted); }
 .btn:hover { border-color: var(--accent); }
 .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 700; }
 
-/* Rail: collapsed icon strip that expands in place into the full menu */
+/* Rail: collapsed icon strip that expands in place into the full menu.
+   Every motion below follows the Switch recording: the rail width overshoots ~8% when opening, the icons slide
+   but never overshoot, the white pill grows from a rounded square into a full-width bar (and snaps back to a
+   square when closing), the labels fade with the slide, and the blurred scrim lags the rail. */
 .rail {
-    --b: max(36px, calc(var(--rail) * .56));          /* collapsed button size */
-    --row: clamp(48px, 8.5vh, 64px);                  /* menu row height = spacing between icons, open or closed */
-    --mb: 6.3vh;                                      /* distance of the last icon row from the bottom padding */
-    --open-w: clamp(260px, 38.5vw, 560px);
+    --u: calc(var(--rail) / 100);                      /* 1px of the 1280x720 reference */
+    --b: max(36px, calc(var(--rail) * .48));           /* collapsed pill size */
+    --sz: calc(var(--b) * .625);                       /* icon size */
+    --row: clamp(48px, 8.5vh, 64px);                   /* row height = icon spacing, open or closed */
+    --mb: 6.3vh;                                       /* distance of the last row from the bottom padding */
+    --open-w: clamp(260px, 38.4375vw, 560px);
     --exp-font: clamp(1rem, 1.9vw, 1.6rem);
-    --ease: cubic-bezier(.22, 1, .36, 1);            /* vertical / size changes: smooth */
-    --ease-x: linear(0, 0.005, 0.013, 0.028, 0.049, 0.075, 0.111, 0.161, 0.222, 0.296, 0.394, 0.505, 0.621, 0.778, 0.925, 0.99, 0.988, 0.984, 0.981, 0.979, 0.977, 0.976, 0.976, 0.978, 0.98, 0.983, 0.988, 0.995, 1, 1, 1);   /* collapsing: matched to the Switch recording (30fps) */
-    --dur: 0.300s;
-    --dur-x: 0.300s;
+    --ix-rest: calc((var(--rail) - var(--sz)) / 2 - var(--u));   /* icon x, collapsed */
+    --ix-open: calc(var(--u) * 68);                              /* icon x, expanded */
+    --pl-rest: calc((var(--rail) - var(--b)) / 2);               /* pill left, collapsed */
     position: fixed; z-index: 10; left: 0; top: 0; bottom: 0; width: var(--rail);
     background: var(--rail-bg); overflow: hidden;
     display: flex; flex-direction: column; align-items: stretch;
     padding: 4.3vh 0 5vh;
-    transition: width var(--dur-x) var(--ease-x);
+    transition: width var(--D) var(--e-w-close);
 }
-/* Opening: curve measured from the Switch recording: glide right, overshoot ~8%, settle back leftwards */
-body.menu-open .rail { --ease-x: linear(0, 0.014, 0.033, 0.054, 0.08, 0.113, 0.163, 0.27, 0.407, 0.534, 0.619, 0.688, 0.749, 0.812, 0.888, 0.974, 1.044, 1.071, 1.074, 1.076, 1.078, 1.077, 1.062, 1.039, 1.021, 1.013, 1.006, 1.002, 1, 1, 1); --dur-x: 0.267s; --dur: 0.267s; width: var(--open-w); }
+body.menu-open .rail { width: var(--open-w); transition: width var(--D) var(--e-w-open); }
 
-.rail-head { display: flex; align-items: center; gap: 14px; white-space: nowrap; height: max(48px, calc(var(--rail) * .56));
-    padding-left: calc((var(--rail) - var(--rail) * .56) / 2);
-    transition: padding-left var(--dur-x) var(--ease-x); }
-body.menu-open .rail-head { padding-left: 2vw; }
+.rail-head { display: flex; align-items: center; gap: calc(var(--u) * 13); white-space: nowrap; height: var(--b);
+    padding-left: var(--pl-rest); }
 .rail-badge {
-    flex: none; width: calc(var(--rail) * .56); height: calc(var(--rail) * .56);
+    flex: none; width: var(--b); height: var(--b);
     border-radius: 50%; border: 3px solid #fff; background: #2a0a0d; padding: 0; cursor: pointer;
     display: grid; place-items: center; color: #fff; font-weight: 800; font-family: inherit;
-    font-size: calc(var(--rail) * .26); text-transform: uppercase;
+    font-size: calc(var(--b) * .46); text-transform: uppercase;
     box-shadow: 0 0 0 2px rgba(0,0,0,.25);
-    transition: width var(--dur-x) var(--ease-x), height var(--dur-x) var(--ease-x), font-size var(--dur) var(--ease);
 }
-body.menu-open .rail-badge { width: 48px; height: 48px; font-size: 1.2rem; }
 .rail-who { display: flex; flex-direction: column; line-height: 1.2; min-width: 0; color: #fff;
-    opacity: 0; transition: opacity .15s ease; }
+    opacity: 0; transition: opacity var(--D) var(--e-who-close); }
 .rail-who span { overflow: hidden; text-overflow: ellipsis; }
 .rail-who span:first-child { font-size: .85rem; opacity: .85; }
-body.menu-open .rail-who { opacity: 1; transition: opacity .12s ease .1s; }
+body.menu-open .rail-who { opacity: 1; transition: opacity var(--D) var(--e-who-open); }
 
 .rail-nav {
-    margin-top: auto; margin-bottom: calc(var(--mb) + (var(--row) - var(--b)) / 2); width: 100%;
-    display: flex; flex-direction: column; align-items: flex-start; gap: calc(var(--row) - var(--b));
-    transition: gap var(--dur) var(--ease), margin-bottom var(--dur) var(--ease);
+    margin-top: auto; margin-bottom: var(--mb); width: 100%;
+    display: flex; flex-direction: column; align-items: stretch;
 }
-/* Collapsed icons sit at the same spacing and height as the menu rows, so nothing shifts */
-body.menu-open .rail-nav { gap: 0; margin-bottom: var(--mb); }
 .rail-btn {
-    display: flex; align-items: center; flex: none; white-space: nowrap;
-    width: var(--b); height: var(--b);
-    margin-left: calc((var(--rail) - var(--b)) / 2);
-    padding: 0 0 0 calc(var(--b) * .19);
-    border: 0; border-radius: 14%; background: transparent; color: #fff; cursor: pointer;
+    position: relative; display: flex; align-items: center; flex: none; white-space: nowrap;
+    width: 100%; height: var(--row); margin: 0; padding: 0;
+    border: 0; border-radius: 0; background: transparent; color: #fff; cursor: pointer;
     font: inherit; font-size: var(--exp-font); text-align: left;
-    transition: width var(--dur-x) var(--ease-x), height var(--dur) var(--ease), margin-left var(--dur-x) var(--ease-x),
-                padding-left var(--dur-x) var(--ease-x), border-radius var(--dur) var(--ease), background-color .12s;
-}
-body.menu-open .rail-btn {
-    width: 100%; height: var(--row); margin-left: 0; border-radius: 0;
-    padding-left: clamp(36px, 5vw, 80px);
 }
 .rail-btn[hidden] { display: none; }
-.rail-btn svg {
-    flex: none; width: calc(var(--b) * .62); height: calc(var(--b) * .62);
-    fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
-    transition: width var(--dur-x) var(--ease-x), height var(--dur-x) var(--ease-x);
+/* The white pill: a rounded square behind the icon when collapsed, a full-width bar when open */
+.rail-btn::before {
+    content: ""; position: absolute; z-index: 0; top: 50%; height: var(--b); transform: translateY(-50%);
+    left: var(--pl-rest); width: var(--b); border-radius: calc(var(--b) * .14);
+    background: #fff; opacity: 0; pointer-events: none;
+    /* closing: the bar snaps to a square around the icon, which then slides left with it */
+    transition: left var(--D) var(--e-pl-close), width 0s, border-radius 0s;
 }
-body.menu-open .rail-btn svg { width: calc(var(--exp-font) * 1.7); height: calc(var(--exp-font) * 1.7); }
+body.menu-open .rail-btn::before {
+    left: 0; width: var(--open-w); border-radius: 0;
+    transition: left var(--D) var(--e-pl-open), width var(--D) var(--e-pw-open), border-radius var(--D) var(--e-pl-open);
+}
+body:not(.menu-open) .rail-btn[aria-pressed="true"]::before { opacity: 1; }
+body:not(.menu-open) .rail-btn[aria-pressed="true"] { color: var(--rail-bg); }
+body:not(.menu-open) .rail-btn:not([aria-pressed="true"]):hover::before { opacity: 1; background: rgba(255,255,255,.18); }
+body:not(.menu-open) .rail-btn:focus-visible::before { opacity: 1; background: rgba(255,255,255,.35); }
+body:not(.menu-open) .rail-btn[aria-pressed="true"]:focus-visible::before { background: #fff; }
+.rail-btn:focus-visible { outline: 0; }
+body.menu-open .rail-btn:focus::before { opacity: 1; }
+body.menu-open .rail-btn:focus { color: var(--rail-bg); outline: 0; }
+
+.rail-btn svg {
+    position: relative; z-index: 1; flex: none; width: var(--sz); height: var(--sz);
+    margin-left: var(--ix-rest);
+    fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    transition: margin-left var(--D) var(--e-icon-close);
+}
+body.menu-open .rail-btn svg { margin-left: var(--ix-open); transition: margin-left var(--D) var(--e-icon-open); }
 .rail-btn svg .dot { fill: currentColor; stroke: none; }
-.rail-label { margin-left: 1.2rem; opacity: 0; transition: opacity .12s ease; pointer-events: none; }
-body.menu-open .rail-label { opacity: 1; transition: opacity .12s ease .1s; }
-.rail-btn:hover { background: rgba(255,255,255,.18); }
-body:not(.menu-open) .rail-btn[aria-pressed="true"] { background: #fff; color: var(--rail-bg); }
-.rail-btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
-body.menu-open .rail-btn:focus-visible { outline: 0; }
-body.menu-open .rail-btn:hover { background: transparent; }
-body.menu-open .rail-btn:focus { background: #fff; color: var(--rail-bg); }
+/* Labels ride along with the icon; the focused one is white on the white bar until the bar has settled, then red */
+.rail-label {
+    position: relative; z-index: 1; margin-left: calc(var(--u) * 20.5); color: #fff;
+    opacity: 0; transition: opacity var(--D) var(--e-lab-close); pointer-events: none;
+}
+body.menu-open .rail-label { opacity: 1; transition: opacity var(--D) var(--e-lab-open); }
+body.menu-open .rail-btn:focus .rail-label { color: var(--rail-bg); }
+body.menu-open.menu-opening .rail-btn:focus .rail-label { color: #fff; }
 
 /* Library */
 main { margin-left: var(--rail); min-height: 100vh; padding-bottom: 64px; }
@@ -229,20 +275,96 @@ main { margin-left: var(--rail); min-height: 100vh; padding-bottom: 64px; }
 .viewer-title h2 { margin: 0; font-size: 1.05rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .viewer-title a { color: var(--muted); font-size: .85rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-.viewer-controls {
-    position: absolute; z-index: 2; right: 2vw; top: 4.3vh;
-    display: flex; flex-direction: column; gap: .5rem; width: 150px;
+/* Small menu button, bottom right of the viewer */
+.pause-btn {
+    position: absolute; z-index: 3; right: 14px; bottom: 14px; width: 40px; height: 40px;
+    display: grid; place-items: center; padding: 0; border: 0; border-radius: 50%;
+    background: rgba(0, 0, 0, .45); color: #fff; cursor: pointer; opacity: .7;
+    transition: opacity .12s ease, background .12s ease;
 }
-.viewer-controls .btn { text-align: center; width: 100%; }
+.pause-btn:hover, .pause-btn:focus-visible { opacity: 1; background: rgba(0, 0, 0, .75); transition: opacity .12s ease, background .12s ease; }
 
-/* Compact: not enough side space, so controls go in a bar above the game */
+/* Compact: not enough side space, so the badge sits in a bar above the game */
 #viewer.compact .badge { left: 10px; top: 10px; --badge: 38px; }
 #viewer.compact .viewer-title { display: none; }
-#viewer.compact .viewer-controls {
-    flex-direction: row; width: auto; left: 60px; right: 10px; top: 10px;
-    justify-content: flex-end; overflow-x: auto; gap: .4rem; padding: 3px;
+
+/* Launch / leave transitions (script.js drives them with the timings measured from the recording) */
+#launchShade { position: fixed; inset: 0; z-index: 19; background: #000; opacity: 0; pointer-events: none; display: none; }
+#viewer.pre { visibility: hidden; }
+#viewer.launching, #viewer.leaving { background: transparent; }
+#viewer.launching .bg-side, #viewer.leaving .bg-side { visibility: hidden; }
+#viewer.leaving .badge, #viewer.leaving .viewer-title, #viewer.leaving .pause-btn { visibility: hidden; }
+#stage { transform-origin: 20% 87%; }          /* the game window zooms to and from the selected tile */
+
+/* In-game menu, laid out after the Switch's: right-aligned items, white bar on the selected one, thin vertical line.
+   Sizes scale from a 1280x720 design (--u = 1 px there). Opening: the menu slides in ~20px while fading, the game
+   behind it blurs (26px) and dims (37.5%); closing is the same animation played backwards. */
+.pause {
+    --u: max(min(100vw / 1280, 100vh / 720), .6px);
+    position: absolute; inset: 0; z-index: 6; color: #fff;
+    visibility: hidden; pointer-events: none;
+    transition: visibility 0s linear .2s;
 }
-#viewer.compact .viewer-controls .btn { width: auto; font-size: .85rem; padding: .35rem .6rem; }
+.pause.on { visibility: visible; pointer-events: auto; transition: visibility 0s; }
+.pause-scrim {
+    --blur: calc(100vw * 26 / 1280);
+    position: absolute; inset: 0; background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
+    transition: background-color var(--PD) var(--e-pm-dim-close), backdrop-filter var(--PD) var(--e-pm-blur-close),
+                -webkit-backdrop-filter var(--PD) var(--e-pm-blur-close);
+}
+.pause.on .pause-scrim {
+    background-color: rgba(0, 0, 0, .375); backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    transition: background-color var(--PD) var(--e-pm-dim-open), backdrop-filter var(--PD) var(--e-pm-blur-open),
+                -webkit-backdrop-filter var(--PD) var(--e-pm-blur-open);
+}
+.pause-ui { position: absolute; inset: 0; opacity: 0; transform: translateX(calc(var(--u) * -20));
+    transition: opacity var(--PD) var(--e-pm-a-close), transform var(--PD) var(--e-pm-s-close); }
+.pause.on .pause-ui { opacity: 1; transform: none;
+    transition: opacity var(--PD) var(--e-pm-a-open), transform var(--PD) var(--e-pm-s-open); }
+.pause-profile {
+    position: absolute; left: calc(var(--u) * 26); top: calc(var(--u) * 30);
+    display: flex; align-items: center; gap: calc(var(--u) * 13); max-width: 40%;
+    opacity: 0; transition: opacity var(--PD) var(--e-pm-a-close);
+}
+.pause.on .pause-profile { opacity: 1; transition: opacity var(--PD) var(--e-pm-a-open); }
+.pause-badge {
+    flex: none; width: calc(var(--u) * 48); height: calc(var(--u) * 48); border-radius: 50%;
+    border: calc(var(--u) * 2) solid #f4f4f4; background: #444; overflow: hidden;
+    display: grid; place-items: center; font-weight: 800; font-size: calc(var(--u) * 22);
+}
+.pause-badge img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pause-profile-text { display: flex; flex-direction: column; min-width: 0; font-size: calc(var(--u) * 17); line-height: 1.2; }
+.pause-profile-text span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pause-line {
+    position: absolute; left: 50.94%; top: 3.75%; bottom: 3.75%;
+    width: max(1px, calc(var(--u) * 1.5)); background: #fff;
+}
+.pause-list {
+    position: absolute; left: 12.5%; width: 38.44%; top: 24.6%;
+    display: flex; flex-direction: column; gap: calc(var(--u) * 14.4);
+}
+.pause-item {
+    display: block; width: 100%; height: calc(var(--u) * 47); padding: 0 calc(var(--u) * 59) 0 0;
+    border: 0; border-radius: 0; background: none; color: #fff; text-align: right; white-space: nowrap;
+    font-family: inherit; font-weight: 400; font-size: calc(var(--u) * 24); line-height: 1; cursor: pointer;
+}
+.pause-item[hidden] { display: none; }
+.pause-item:focus, .pause-item:hover { background: #fff; color: #ff1e00; outline: none; }   /* the bar jumps in one frame */
+.pause-hints {
+    position: absolute; right: calc(var(--u) * 38); bottom: calc(var(--u) * 17);
+    display: flex; align-items: center; gap: calc(var(--u) * 30);
+    opacity: 0; transition: opacity var(--PD) var(--e-pm-hin-close);
+}
+.pause.on .pause-hints { opacity: 1; transition: opacity var(--PD) var(--e-pm-hin-open); }
+.pause-hints .hint { font-size: calc(var(--u) * 24); gap: calc(var(--u) * 10); color: #fff; }
+.pause-hints .hint kbd {
+    width: calc(var(--u) * 26); height: calc(var(--u) * 26); background: #fff; color: #000;
+    font-size: calc(var(--u) * 17);
+}
+/* The small menu button fades out as the menu comes in, and back when it leaves */
+.pause-btn { transition: opacity var(--PD) var(--e-pm-hout-close), background .12s ease; }
+#viewer.menu-on .pause-btn { opacity: 0; pointer-events: none; transition: opacity var(--PD) var(--e-pm-hout-open); }
 
 /* Popup */
 /* Popups */
@@ -255,28 +377,40 @@ main { margin-left: var(--rail); min-height: 100vh; padding-bottom: 64px; }
 .row-actions { display: flex; gap: .5rem; }
 .muted { color: var(--muted); margin: 0; min-height: 1.5em; }
 
+/* Follows the device's "reduce motion" setting unless the visitor picked Settings > Animations > Always play */
 @media (prefers-reduced-motion: reduce) {
-    * { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+    html:not([data-motion="always"]) *, html:not([data-motion="always"]) *::before, html:not([data-motion="always"]) *::after {
+        animation: none !important; transition: none !important; scroll-behavior: auto !important;
+    }
 }
 
-/* Blurred library behind the expanded rail */
+/* Blurred, dimmed library behind the expanded rail (32px blur and ~27% black at 1280 wide) */
 .menu-scrim {
+    --blur: calc(100vw * 32 / 1280);
     position: fixed; inset: 0; z-index: 9;
-    background: rgba(0, 0, 0, .35);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    opacity: 0; visibility: hidden;
-    transition: opacity .1s ease, visibility 0s linear .1s;      /* closing: blur clears as the rail starts to shrink */
+    background-color: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
+    visibility: hidden;
+    transition: background-color var(--D) var(--e-dim-close), backdrop-filter var(--D) var(--e-blur-close),
+                -webkit-backdrop-filter var(--D) var(--e-blur-close), visibility 0s linear var(--D);
 }
-body.menu-open .menu-scrim { opacity: 1; visibility: visible; transition: opacity .16s ease .14s, visibility 0s; }   /* opening: blur lags the rail */
-.hints { transition: opacity .1s ease .2s; }                      /* closing: library hints return near the end */
-body.menu-open .hints { opacity: 0; pointer-events: none; transition: opacity .05s; }
+body.menu-open .menu-scrim {
+    background-color: rgba(0, 0, 0, .266);
+    backdrop-filter: blur(var(--blur)); -webkit-backdrop-filter: blur(var(--blur));
+    visibility: visible;
+    transition: background-color var(--D) var(--e-dim-open), backdrop-filter var(--D) var(--e-blur-open),
+                -webkit-backdrop-filter var(--D) var(--e-blur-open), visibility 0s;
+}
+/* Hint bars cross-fade in two steps: the old one fades out (linear, ~130ms), then the new one comes in */
+.hints { transition: opacity var(--D) var(--e-hl-close); }
+body.menu-open .hints { opacity: 0; pointer-events: none; transition: opacity var(--D) var(--e-hl-open); }
 
 .menu-hints {
     position: fixed; z-index: 11; right: 0; bottom: 0; height: 44px; padding: 0 2vw; gap: 1.6rem;
     display: flex; align-items: center; background: var(--hint-bg); backdrop-filter: blur(6px);
-    opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility 0s linear .2s;
+    opacity: 0; visibility: hidden; transition: opacity var(--D) var(--e-hm-close), visibility 0s linear var(--D);
 }
-body.menu-open .menu-hints { opacity: 1; visibility: visible; transition: opacity .12s ease .22s; }
+body.menu-open .menu-hints { opacity: 1; visibility: visible; transition: opacity var(--D) var(--e-hm-open), visibility 0s; }
 .menu-hints .hint { color: #fff; }
 .menu-hints .hint kbd { background: #fff; color: #000; }
 #settingsBtn svg { stroke-width: 1.6; }
